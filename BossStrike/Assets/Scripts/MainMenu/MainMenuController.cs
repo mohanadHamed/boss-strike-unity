@@ -20,6 +20,13 @@ public class MainMenuController : MonoBehaviour
     private TextMeshProUGUI _player2NameText;
 
     [SerializeField]
+    private Button _playButton;
+    [SerializeField]
+    private Button _selectCharacterButton;
+    [SerializeField] 
+    private Button _settingsButton;
+    
+    [SerializeField]
     private SceneLoader _sceneLoader;
 
     private void Start()
@@ -43,7 +50,8 @@ public class MainMenuController : MonoBehaviour
 
     public void PlayButtonClick()
     {
-        _sceneLoader.LoadTargetScene("Game");
+        DisableAllButtons();
+        _sceneLoader.LoadTargetScene("Gameplay");
     }
 
     public void SelecCharacterClick()
@@ -61,5 +69,12 @@ public class MainMenuController : MonoBehaviour
     public void BackButtonClick()
     {
         InitializeUi();
+    }
+
+    private void DisableAllButtons()
+    {
+        _playButton.interactable = false;
+        _selectCharacterButton.interactable = false;
+        _settingsButton.interactable = false;
     }
 }

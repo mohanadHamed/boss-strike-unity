@@ -5,6 +5,10 @@ using UnityEngine.UI;
 
 public class SceneLoader : MonoBehaviour
 {
+
+    [SerializeField]
+    private float _sceneTransitionDurationInSeconds = 10f;
+
     [SerializeField]
     private Slider _loadingBar;
 
@@ -20,14 +24,15 @@ public class SceneLoader : MonoBehaviour
 
         AsyncOperation operation = SceneManager.LoadSceneAsync(sceneName);
         operation.allowSceneActivation = false;
+        var startTime = Time.time;
 
         while (!operation.isDone)
         {
-            // Progress is [0, 0.9] — Unity waits at 0.9 until allowSceneActivation = true
             float progress = Mathf.Clamp01(operation.progress / 0.9f);
-            _loadingBar.value = progress;
+            var timedProgress = Mathf.Clamp01((Time.time - startTime) / _sceneTransitionDurationInSeconds);
+            _loadingBar.value = Mathf.Min(progress, timedProgress);
 
-            if (operation.progress >= 0.9f)
+            if (_loadingBar.value >= 0.98f)
             {
                 // Optional delay before activation (or wait for user input)
                 yield return new WaitForSeconds(1f);
