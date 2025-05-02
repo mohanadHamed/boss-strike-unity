@@ -67,6 +67,7 @@
     <Compile Include="Assets\Scripts\MainMenu\SelectCharacterController.cs" />
     <Compile Include="Assets\Scripts\SaveSystem\GameSaveData.cs" />
     <Compile Include="Assets\Scripts\MainMenu\SettingsController.cs" />
+    <Compile Include="Assets\Scripts\MainMenu\SceneLoader.cs" />
     <Compile Include="Assets\AssetStore\_Heathen Engineering\Samples\UX Examples\Flat Icons [Free]\ToggleSetAnimatorBoolean.cs" />
     <Compile Include="Assets\TutorialInfo\Scripts\Readme.cs" />
     <Compile Include="Assets\Scripts\SaveSystem\SaveSystem.cs" />

@@ -19,6 +19,9 @@ public class MainMenuController : MonoBehaviour
     [SerializeField]
     private TextMeshProUGUI _player2NameText;
 
+    [SerializeField]
+    private SceneLoader _sceneLoader;
+
     private void Start()
     {
         InitializeUi();
@@ -40,7 +43,7 @@ public class MainMenuController : MonoBehaviour
 
     public void PlayButtonClick()
     {
-
+        _sceneLoader.LoadTargetScene("Game");
     }
 
     public void SelecCharacterClick()
