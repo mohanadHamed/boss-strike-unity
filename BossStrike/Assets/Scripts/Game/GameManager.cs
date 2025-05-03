@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering;
 using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
@@ -20,7 +21,7 @@ public class GameManager : MonoBehaviour
 
     private Dictionary<PlayerCharacter, Material> _playerCharacterMaterialMap;
 
-
+    
     public Texture GetTextureForPlayer(PlayerNumber playerNumber)
     {
         return playerNumber == PlayerNumber.PlayerOne

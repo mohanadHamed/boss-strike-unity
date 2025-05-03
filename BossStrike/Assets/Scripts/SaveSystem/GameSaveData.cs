@@ -16,4 +16,9 @@ public class GameSaveData
     public bool SoundEffectsEnabled = true;
 
     public LeaderboardEntry[] LeaderboardEntries = new LeaderboardEntry[10];
+
+    public string GetPlayerName(PlayerNumber playerNumber)
+    {
+        return playerNumber == PlayerNumber.PlayerOne ? Player1Name : Player2Name;
+    }
 }
