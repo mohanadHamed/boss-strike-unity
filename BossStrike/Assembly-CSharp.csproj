@@ -70,6 +70,7 @@
     <Compile Include="Assets\Scripts\MainMenu\SceneLoader.cs" />
     <Compile Include="Assets\AssetStore\_Heathen Engineering\Samples\UX Examples\Flat Icons [Free]\ToggleSetAnimatorBoolean.cs" />
     <Compile Include="Assets\TutorialInfo\Scripts\Readme.cs" />
+    <Compile Include="Assets\Scripts\Game\Player\PlayerController.cs" />
     <Compile Include="Assets\Scripts\SaveSystem\SaveSystem.cs" />
     <Compile Include="Assets\Scripts\Game\DataTypes\PlayerNumber.cs" />
   </ItemGroup>
