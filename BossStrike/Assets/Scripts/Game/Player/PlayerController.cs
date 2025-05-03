@@ -30,6 +30,8 @@ public class PlayerController : MonoBehaviour
 
     private Vector3 _moveDirection = Vector3.zero;
 
+    private bool _receivingHit = false;
+
     private readonly Dictionary<PlayerInput, KeyCode> _player1InputMappings = new()
     {
         { PlayerInput.MoveLeft, KeyCode.A },
@@ -52,10 +54,21 @@ public class PlayerController : MonoBehaviour
 
     public IEnumerator ReceiveHit()
     {
+        if(_receivingHit)
+        {
+            yield break;
+        }
+
+        _receivingHit = true;
+        _moveDirection = Vector3.zero;
         _animator.ResetTrigger(AnimationStates.Run);
         _animator.SetTrigger(AnimationStates.Hit);
-        yield return new WaitForSeconds(3f);
+        _rigidbody.linearVelocity = Vector3.zero;
+        yield return new WaitForSeconds(0.5f);
         _animator.ResetTrigger(AnimationStates.Hit);
+
+        yield return new WaitForSeconds(1.5f);
+        _receivingHit = false;
     }
 
 
@@ -97,7 +110,7 @@ public class PlayerController : MonoBehaviour
 
     private void HandleInput()
     {
-        if(_animator.GetBool(AnimationStates.Hit))
+        if(_receivingHit)
         {
             return;
         }
@@ -130,13 +143,13 @@ public class PlayerController : MonoBehaviour
 
     private void MovePlayer()
     {
-        if (_moveDirection != Vector3.zero)
+        if (_receivingHit || _moveDirection == Vector3.zero)
         {
-            _rigidbody.linearVelocity = _moveDirection * _moveSpeed * Time.deltaTime;
+            _rigidbody.linearVelocity = Vector3.zero;
         }
         else
         {
-            _rigidbody.linearVelocity = Vector3.zero;
+            _rigidbody.linearVelocity = _moveDirection * _moveSpeed * Time.deltaTime;
         }
     }
 
