@@ -34,8 +34,8 @@ public class SceneLoader : MonoBehaviour
 
             if (_loadingBar.value >= 0.98f)
             {
-                // Optional delay before activation (or wait for user input)
-                yield return new WaitForSeconds(1f);
+                // Optional delay before activation
+                yield return new WaitForSeconds(0.5f);
                 operation.allowSceneActivation = true;
             }
 

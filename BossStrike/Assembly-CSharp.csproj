@@ -61,10 +61,10 @@
     <Analyzer Include="C:\Program Files\Unity\Hub\Editor\6000.0.48f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.UIToolkit.SourceGenerator.dll" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Scripts\Game\PlayerStatsPanelController.cs" />
     <Compile Include="Assets\Scripts\Game\DataTypes\PlayerCharacter.cs" />
     <Compile Include="Assets\Scripts\Game\DataTypes\PlayerInput.cs" />
     <Compile Include="Assets\Scripts\Game\GameManager.cs" />
-    <Compile Include="Assets\Scripts\Game\HealthPanelController.cs" />
     <Compile Include="Assets\Scripts\MainMenu\MainMenuController.cs" />
     <Compile Include="Assets\Scripts\MainMenu\SelectCharacterController.cs" />
     <Compile Include="Assets\Scripts\SaveSystem\GameSaveData.cs" />
@@ -74,6 +74,7 @@
     <Compile Include="Assets\Scripts\Game\GameplayManager.cs" />
     <Compile Include="Assets\TutorialInfo\Scripts\Readme.cs" />
     <Compile Include="Assets\Scripts\Game\Player\PlayerController.cs" />
+    <Compile Include="Assets\Scripts\Game\Boss\BossController.cs" />
     <Compile Include="Assets\Scripts\SaveSystem\SaveSystem.cs" />
     <Compile Include="Assets\Scripts\Game\DataTypes\PlayerNumber.cs" />
   </ItemGroup>

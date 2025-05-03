@@ -1,9 +1,18 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
+public static class AnimationStates
+{
+    public const string Run = "IsRunning";
+    public const string Hit = "Hit";
+}
+
 public class PlayerController : MonoBehaviour
 {
+    public PlayerNumber PlayerNumber => _playerNumber;
+
     [SerializeField]
     private PlayerNumber _playerNumber = PlayerNumber.PlayerOne;
 
@@ -21,7 +30,7 @@ public class PlayerController : MonoBehaviour
 
     private Vector3 _moveDirection = Vector3.zero;
 
-    private readonly Dictionary<PlayerInput, KeyCode> _player1InputMappings = new Dictionary<PlayerInput, KeyCode>
+    private readonly Dictionary<PlayerInput, KeyCode> _player1InputMappings = new()
     {
         { PlayerInput.MoveLeft, KeyCode.A },
         { PlayerInput.MoveRight, KeyCode.D },
@@ -30,7 +39,7 @@ public class PlayerController : MonoBehaviour
         { PlayerInput.Attack, KeyCode.Space }
     };
 
-    private readonly Dictionary<PlayerInput, KeyCode> _player2InputMappings = new Dictionary<PlayerInput, KeyCode>
+    private readonly Dictionary<PlayerInput, KeyCode> _player2InputMappings = new()
     {
         { PlayerInput.MoveLeft, KeyCode.Keypad4 },
         { PlayerInput.MoveRight, KeyCode.Keypad6 },
@@ -40,6 +49,15 @@ public class PlayerController : MonoBehaviour
     };
 
     private Dictionary<PlayerNumber, Dictionary<PlayerInput, KeyCode>> _inputMappings;
+
+    public IEnumerator ReceiveHit()
+    {
+        _animator.ResetTrigger(AnimationStates.Run);
+        _animator.SetTrigger(AnimationStates.Hit);
+        yield return new WaitForSeconds(3f);
+        _animator.ResetTrigger(AnimationStates.Hit);
+    }
+
 
     private void Awake()
     {
@@ -67,7 +85,7 @@ public class PlayerController : MonoBehaviour
         _meshRenderer.sharedMaterial = GameManager.Instance.GetMaterialForPlayer(_playerNumber);
     }
 
-    void Update()
+    private void Update()
     {
         HandleInput();
     }
@@ -77,8 +95,13 @@ public class PlayerController : MonoBehaviour
         MovePlayer();
     }
 
-    void HandleInput()
+    private void HandleInput()
     {
+        if(_animator.GetBool(AnimationStates.Hit))
+        {
+            return;
+        }
+
         _moveDirection = Vector3.zero;
 
         if (Input.GetKey(_inputMappings[_playerNumber][PlayerInput.MoveRight]))
@@ -102,10 +125,10 @@ public class PlayerController : MonoBehaviour
             RotateToAngle(180f);
         }
 
-        _animator.SetBool("IsRunning", _moveDirection != Vector3.zero);
+        _animator.SetBool(AnimationStates.Run, _moveDirection != Vector3.zero);
     }
 
-    void MovePlayer()
+    private void MovePlayer()
     {
         if (_moveDirection != Vector3.zero)
         {
@@ -117,7 +140,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    void RotateToAngle(float angleY)
+    private void RotateToAngle(float angleY)
     {
         Quaternion targetRotation = Quaternion.Euler(0f, angleY, 0f);
         transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, _rotationSpeed * Time.deltaTime);

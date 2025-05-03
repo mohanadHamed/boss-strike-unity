@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class GameplayManager : MonoBehaviour
@@ -12,6 +13,11 @@ public class GameplayManager : MonoBehaviour
     public int BossLives { get; private set; }
 
     public bool IsGameOver => (Player1Lives <= 0 && Player2Lives <= 0) || BossLives <= 0;
+
+    [SerializeField]
+    private PlayerStatsPanelController _player1HealthPanelController;
+    [SerializeField]
+    private PlayerStatsPanelController _player2HealthPanelController;
 
     private void Awake()
     {
@@ -63,12 +69,17 @@ public class GameplayManager : MonoBehaviour
         if (playerNumber == PlayerNumber.PlayerOne)
         {
             Player1Lives--;
+            _player1HealthPanelController.UpdateHeartImages(Player1Lives);
         }
         else
         {
             Player2Lives--;
+            _player2HealthPanelController.UpdateHeartImages(Player2Lives);
         }
     }
 
-
+    internal int GetPlayerScore(PlayerNumber playerNumber)
+    {
+        return playerNumber == PlayerNumber.PlayerOne ? Player1Score : Player2Score;
+    }
 }
