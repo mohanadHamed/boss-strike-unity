@@ -1,18 +1,54 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
 public class PlayerController : MonoBehaviour
 {
     [SerializeField]
+    private PlayerNumber _playerNumber = PlayerNumber.PlayerOne;
+
+    [SerializeField]
     private float _rotationSpeed = 720f; // degrees per second
 
     [SerializeField]
     private float _moveSpeed = 30f; // units per second
 
+    [SerializeField]
+    private SkinnedMeshRenderer _meshRenderer;
+
     private Animator _animator;
     private Rigidbody _rigidbody;
 
-    private Vector3 moveDirection = Vector3.zero;
+    private Vector3 _moveDirection = Vector3.zero;
+
+    private readonly Dictionary<PlayerInput, KeyCode> _player1InputMappings = new Dictionary<PlayerInput, KeyCode>
+    {
+        { PlayerInput.MoveLeft, KeyCode.A },
+        { PlayerInput.MoveRight, KeyCode.D },
+        { PlayerInput.MoveUp, KeyCode.W },
+        { PlayerInput.MoveDown, KeyCode.S },
+        { PlayerInput.Attack, KeyCode.Space }
+    };
+
+    private readonly Dictionary<PlayerInput, KeyCode> _player2InputMappings = new Dictionary<PlayerInput, KeyCode>
+    {
+        { PlayerInput.MoveLeft, KeyCode.Keypad4 },
+        { PlayerInput.MoveRight, KeyCode.Keypad6 },
+        { PlayerInput.MoveUp, KeyCode.Keypad8 },
+        { PlayerInput.MoveDown, KeyCode.Keypad2 },
+        { PlayerInput.Attack, KeyCode.Return }
+    };
+
+    private Dictionary<PlayerNumber, Dictionary<PlayerInput, KeyCode>> _inputMappings;
+
+    private void Awake()
+    {
+        _inputMappings = new Dictionary<PlayerNumber, Dictionary<PlayerInput, KeyCode>>
+        {
+            { PlayerNumber.PlayerOne,  _player1InputMappings},
+            { PlayerNumber.PlayerTwo,  _player2InputMappings}
+        };
+    }
 
     private void Start()
     {
@@ -27,6 +63,8 @@ public class PlayerController : MonoBehaviour
         {
             Debug.LogError("Rigidbody component not found on the player object.");
         }
+
+        _meshRenderer.sharedMaterial = GameManager.Instance.GetMaterialForPlayer(_playerNumber);
     }
 
     void Update()
@@ -41,37 +79,37 @@ public class PlayerController : MonoBehaviour
 
     void HandleInput()
     {
-        moveDirection = Vector3.zero;
+        _moveDirection = Vector3.zero;
 
-        if (Input.GetKey(KeyCode.RightArrow))
+        if (Input.GetKey(_inputMappings[_playerNumber][PlayerInput.MoveRight]))
         {
-            moveDirection = Vector3.right;
+            _moveDirection = Vector3.right;
             RotateToAngle(90f);
         }
-        else if (Input.GetKey(KeyCode.LeftArrow))
+        else if (Input.GetKey(_inputMappings[_playerNumber][PlayerInput.MoveLeft]))
         {
-            moveDirection = Vector3.left;
+            _moveDirection = Vector3.left;
             RotateToAngle(270f);
         }
-        else if (Input.GetKey(KeyCode.UpArrow))
+        else if (Input.GetKey(_inputMappings[_playerNumber][PlayerInput.MoveUp]))
         {
-            moveDirection = Vector3.forward;
+            _moveDirection = Vector3.forward;
             RotateToAngle(0f);
         }
-        else if (Input.GetKey(KeyCode.DownArrow))
+        else if (Input.GetKey(_inputMappings[_playerNumber][PlayerInput.MoveDown]))
         {
-            moveDirection = Vector3.back;
+            _moveDirection = Vector3.back;
             RotateToAngle(180f);
         }
 
-        _animator.SetBool("IsRunning", moveDirection != Vector3.zero);
+        _animator.SetBool("IsRunning", _moveDirection != Vector3.zero);
     }
 
     void MovePlayer()
     {
-        if (moveDirection != Vector3.zero)
+        if (_moveDirection != Vector3.zero)
         {
-            _rigidbody.linearVelocity = moveDirection * _moveSpeed * Time.deltaTime;
+            _rigidbody.linearVelocity = _moveDirection * _moveSpeed * Time.deltaTime;
         }
         else
         {

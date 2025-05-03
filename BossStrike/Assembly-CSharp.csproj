@@ -62,6 +62,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Scripts\Game\DataTypes\PlayerCharacter.cs" />
+    <Compile Include="Assets\Scripts\Game\DataTypes\PlayerInput.cs" />
     <Compile Include="Assets\Scripts\Game\GameManager.cs" />
     <Compile Include="Assets\Scripts\MainMenu\MainMenuController.cs" />
     <Compile Include="Assets\Scripts\MainMenu\SelectCharacterController.cs" />

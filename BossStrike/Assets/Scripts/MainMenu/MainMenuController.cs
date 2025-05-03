@@ -41,8 +41,9 @@ public class MainMenuController : MonoBehaviour
         _player2NameText.text = SaveSystem.Load().Player2Name;
 
         // Initialize the selected character images
-        _player1SelectedCharacterImage.texture = GameManager.Instance.PlayerCharacterTextureMap[GameManager.Instance.Player1Character];
-        _player2SelectedCharacterImage.texture = GameManager.Instance.PlayerCharacterTextureMap[GameManager.Instance.Player2Character];
+        _player1SelectedCharacterImage.texture = GameManager.Instance.GetTextureForPlayer(PlayerNumber.PlayerOne);
+        _player2SelectedCharacterImage.texture = GameManager.Instance.GetTextureForPlayer(PlayerNumber.PlayerTwo);
+
         // Set the initial state of the panels
         _selectCharacterPanel.SetActive(false);
         _settingsPanel.SetActive(false);

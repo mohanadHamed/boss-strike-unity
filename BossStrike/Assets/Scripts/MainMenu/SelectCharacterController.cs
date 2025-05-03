@@ -32,8 +32,8 @@ public class SelectCharacterController : MonoBehaviour
 
         _player1NameInputField.text = SaveSystem.Load().Player1Name;
         _player2NameInputField.text = SaveSystem.Load().Player2Name;
-        _player1Image.texture = GameManager.Instance.PlayerCharacterTextureMap[GameManager.Instance.Player1Character];
-        _player2Image.texture = GameManager.Instance.PlayerCharacterTextureMap[GameManager.Instance.Player2Character];
+        _player1Image.texture = GameManager.Instance.GetTextureForPlayer(PlayerNumber.PlayerOne);
+        _player2Image.texture = GameManager.Instance.GetTextureForPlayer(PlayerNumber.PlayerTwo);
 
         _player1NameInputField.onEndEdit.AddListener(OnPlayer1NameChanged);
         _player2NameInputField.onEndEdit.AddListener(OnPlayer2NameChanged);
@@ -59,7 +59,7 @@ public class SelectCharacterController : MonoBehaviour
         int currentIndex = (int)GameManager.Instance.Player1Character;
         int nextIndex = (currentIndex + 1) % _allCharacters.Length;
         GameManager.Instance.Player1Character = _allCharacters[nextIndex];
-        _player1Image.texture = GameManager.Instance.PlayerCharacterTextureMap[GameManager.Instance.Player1Character];
+        _player1Image.texture = GameManager.Instance.GetTextureForPlayer(PlayerNumber.PlayerOne);
     }
 
     public void OnPlayer2NextClick()
@@ -67,7 +67,7 @@ public class SelectCharacterController : MonoBehaviour
         int currentIndex = (int)GameManager.Instance.Player2Character;
         int nextIndex = (currentIndex + 1) % _allCharacters.Length;
         GameManager.Instance.Player2Character = _allCharacters[nextIndex];
-        _player2Image.texture = GameManager.Instance.PlayerCharacterTextureMap[GameManager.Instance.Player2Character];
+        _player2Image.texture = GameManager.Instance.GetTextureForPlayer(PlayerNumber.PlayerTwo);
     }
 
     public void OnPlayer1PrevClick()
@@ -75,14 +75,14 @@ public class SelectCharacterController : MonoBehaviour
         int currentIndex = (int)GameManager.Instance.Player1Character;
         int prevIndex = (currentIndex - 1 + _allCharacters.Length) % _allCharacters.Length;
         GameManager.Instance.Player1Character = _allCharacters[prevIndex];
-        _player1Image.texture = GameManager.Instance.PlayerCharacterTextureMap[GameManager.Instance.Player1Character];
-    }
+        _player1Image.texture = GameManager.Instance.GetTextureForPlayer(PlayerNumber.PlayerOne);
+        }
 
     public void OnPlayer2PrevClick()
     {
         int currentIndex = (int)GameManager.Instance.Player2Character;
         int prevIndex = (currentIndex - 1 + _allCharacters.Length) % _allCharacters.Length;
         GameManager.Instance.Player2Character = _allCharacters[prevIndex];
-        _player2Image.texture = GameManager.Instance.PlayerCharacterTextureMap[GameManager.Instance.Player2Character];
+        _player2Image.texture = GameManager.Instance.GetTextureForPlayer(PlayerNumber.PlayerTwo);
     }
 }

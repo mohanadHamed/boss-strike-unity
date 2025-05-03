@@ -9,12 +9,33 @@ public class GameManager : MonoBehaviour
     public PlayerCharacter Player1Character { get; set; }
     public PlayerCharacter Player2Character { get; set; }
 
-    public Dictionary<PlayerCharacter, Texture> PlayerCharacterTextureMap { get; private set; }
-
     [SerializeField]
     private Texture[] _playerCharacterTextures;
 
-    void Start()
+    [SerializeField]
+    private Material[] _playerCharacterMaterials;
+
+
+    private Dictionary<PlayerCharacter, Texture> _playerCharacterTextureMap;
+
+    private Dictionary<PlayerCharacter, Material> _playerCharacterMaterialMap;
+
+
+    public Texture GetTextureForPlayer(PlayerNumber playerNumber)
+    {
+        return playerNumber == PlayerNumber.PlayerOne
+            ? _playerCharacterTextureMap[Player1Character]
+            : _playerCharacterTextureMap[Player2Character];
+    }
+
+    public Material GetMaterialForPlayer(PlayerNumber playerNumber)
+    {
+        return playerNumber == PlayerNumber.PlayerOne
+            ? _playerCharacterMaterialMap[Player1Character]
+            : _playerCharacterMaterialMap[Player2Character];
+    }
+
+    private void Awake()
     {
         if (Instance == null)
         {
@@ -29,8 +50,13 @@ public class GameManager : MonoBehaviour
         // Ensure this object is not destroyed when loading a new scene
         DontDestroyOnLoad(gameObject);
 
+        Initialize();
+    }
+
+    private void Initialize()
+    {
         // Initialize the player character texture map
-        PlayerCharacterTextureMap = new Dictionary<PlayerCharacter, Texture>
+        _playerCharacterTextureMap = new Dictionary<PlayerCharacter, Texture>
         {
             { PlayerCharacter.Blue, _playerCharacterTextures[(int) PlayerCharacter.Blue] },
             { PlayerCharacter.Green, _playerCharacterTextures[(int) PlayerCharacter.Green] },
@@ -40,7 +66,17 @@ public class GameManager : MonoBehaviour
             { PlayerCharacter.Yellow, _playerCharacterTextures[(int) PlayerCharacter.Yellow] }
         };
 
+        _playerCharacterMaterialMap = new Dictionary<PlayerCharacter, Material>
+        {
+            { PlayerCharacter.Blue, _playerCharacterMaterials[(int) PlayerCharacter.Blue] },
+            { PlayerCharacter.Green, _playerCharacterMaterials[(int) PlayerCharacter.Green] },
+            { PlayerCharacter.Orange, _playerCharacterMaterials[(int) PlayerCharacter.Orange] },
+            { PlayerCharacter.Red, _playerCharacterMaterials[(int) PlayerCharacter.Red] },
+            { PlayerCharacter.White, _playerCharacterMaterials[(int) PlayerCharacter.White] },
+            { PlayerCharacter.Yellow, _playerCharacterMaterials[(int) PlayerCharacter.Yellow] }
+        };
+
         Player1Character = PlayerCharacter.Blue; // Default character for Player 1
-        Player2Character = PlayerCharacter.Green; // Default character for Player 2
+        Player2Character = PlayerCharacter.Yellow; // Default character for Player 2
     }
 }
