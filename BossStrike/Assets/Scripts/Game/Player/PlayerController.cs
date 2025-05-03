@@ -52,6 +52,15 @@ public class PlayerController : MonoBehaviour
 
     private Dictionary<PlayerNumber, Dictionary<PlayerInput, KeyCode>> _inputMappings;
 
+    public KeyCode GetKeyInputForPlayerInput(PlayerInput input)
+    {
+        if (_inputMappings.TryGetValue(_playerNumber, out var playerInputMapping) && playerInputMapping.TryGetValue(input, out var key))
+        {
+            return key;
+        }
+        return KeyCode.None;
+    }
+
     public IEnumerator ReceiveHit()
     {
         if(_receivingHit)
@@ -66,6 +75,12 @@ public class PlayerController : MonoBehaviour
         _rigidbody.linearVelocity = Vector3.zero;
         yield return new WaitForSeconds(0.5f);
         _animator.ResetTrigger(AnimationStates.Hit);
+
+        if(GameplayManager.Instance.GetLivesForPlayer(_playerNumber) <= 0)
+        {
+            gameObject.SetActive(false);
+            yield break;
+        }
 
         yield return new WaitForSeconds(1.5f);
         _receivingHit = false;

@@ -33,6 +33,11 @@ public class PlayerStatsPanelController : MonoBehaviour
             }
         }
     }
+    public void UpdatePlayerScoreText()
+    {
+        // Update the player score text
+        _playerScoreText.text = $"Score: {GameplayManager.Instance.GetPlayerScore(_playerNumber)}";
+    }
 
     private void Start()
     {
@@ -45,11 +50,5 @@ public class PlayerStatsPanelController : MonoBehaviour
 
         // Update the player score text
         UpdatePlayerScoreText();
-    }
-
-    private void UpdatePlayerScoreText()
-    {
-        // Update the player score text
-        _playerScoreText.text = $"Score: {GameplayManager.Instance.GetPlayerScore(_playerNumber)}";
     }
 }

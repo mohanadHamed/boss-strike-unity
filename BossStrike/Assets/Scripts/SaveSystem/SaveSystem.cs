@@ -1,4 +1,6 @@
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using UnityEditor.Overlays;
 using UnityEngine;
 
@@ -21,22 +23,38 @@ public static class SaveSystem
 
     public static void SaveLeaderboardEntry(LeaderboardEntry entry)
     {
-        var data = Load();
-        for (int i = 0; i < data.LeaderboardEntries.Length; i++)
+        var data  = Load();
+        var entries = data.LeaderboardEntries.ToList();
+        var found = false;
+
+        for (int i = 0; i < entries.Count; i++)
         {
-            if (data.LeaderboardEntries[i] == null || data.LeaderboardEntries[i].Score < entry.Score)
+            if (entries[i] != null && entries[i].PlayerName == entry.PlayerName)
             {
-                data.LeaderboardEntries[i] = entry;
+                entries[i].Score = Mathf.Max(entries[i].Score, entry.Score);
+                found = true;
                 break;
             }
         }
+
+        if (!found)
+        {
+            entries.Add(entry);
+        }
+
+        if (entries.Count > 10)
+        {
+            entries.RemoveAt(10);
+        }
+        entries = entries.OrderByDescending(e => e.Score).ToList();
+        data.LeaderboardEntries = entries.ToArray();
         Save(data);
     }
 
-    public static LeaderboardEntry[] LoadLeaderboardEntries()
+    public static List<LeaderboardEntry> LoadLeaderboardEntries()
     {
         var data = Load();
-        return data.LeaderboardEntries;
+        return data.LeaderboardEntries.ToList();
     }
 
     public static void SavePlayer1Name(string name)

@@ -1,4 +1,5 @@
 using System;
+using TMPro;
 using UnityEngine;
 
 public class GameplayManager : MonoBehaviour
@@ -12,12 +13,29 @@ public class GameplayManager : MonoBehaviour
     public int Player2Lives { get; private set; }
     public int BossLives { get; private set; }
 
+    public GameObject BossInstance => _bossInstance;
+    public GameObject RocketPrefab => _rocketPrefab;
+
     public bool IsGameOver => (Player1Lives <= 0 && Player2Lives <= 0) || BossLives <= 0;
 
     [SerializeField]
     private PlayerStatsPanelController _player1HealthPanelController;
     [SerializeField]
     private PlayerStatsPanelController _player2HealthPanelController;
+
+    [SerializeField]
+    private GameObject _bossInstance;
+
+    [SerializeField]
+    private GameObject _rocketPrefab;
+
+    [SerializeField]
+    private GameoverPanelController _gameoverPanelController;
+
+    public int GetLivesForPlayer(PlayerNumber playerNumber)
+    {
+        return playerNumber == PlayerNumber.PlayerOne ? Player1Lives : Player2Lives;
+    }
 
     private void Awake()
     {
@@ -50,36 +68,85 @@ public class GameplayManager : MonoBehaviour
         BossLives = 3;
         Player1Score = 0;
         Player2Score = 0;
+        _player1HealthPanelController.UpdatePlayerScoreText();
+        _player2HealthPanelController.UpdatePlayerScoreText();
     }
 
-    public void UpdatePlayerScore(PlayerNumber playerNumber, int score)
+    public void IncreasePlayerScore(PlayerNumber playerNumber, int score)
     {
         if (playerNumber == PlayerNumber.PlayerOne)
         {
             Player1Score += score;
+            _player1HealthPanelController.UpdatePlayerScoreText();
         }
         else
         {
             Player2Score += score;
+            _player2HealthPanelController.UpdatePlayerScoreText();
         }
     }
 
-    public void DecreasePlayerLives(PlayerNumber playerNumber)
+    public void DecreasePlayerLives(PlayerController playerController)
     {
-        if (playerNumber == PlayerNumber.PlayerOne)
+        if (playerController.PlayerNumber == PlayerNumber.PlayerOne)
         {
             Player1Lives--;
             _player1HealthPanelController.UpdateHeartImages(Player1Lives);
+            if (Player1Lives <= 0)
+            {
+                // Handle player 1 defeat
+                Debug.Log("Player 1 defeated!");
+
+            }
         }
         else
         {
             Player2Lives--;
             _player2HealthPanelController.UpdateHeartImages(Player2Lives);
+            if (Player1Lives <= 0)
+            {
+                // Handle player 1 defeat
+                Debug.Log("Player 1 defeated!");
+
+            }
         }
+
+        CheckGameOver();
     }
 
-    internal int GetPlayerScore(PlayerNumber playerNumber)
+    public void DecreaseBossLives()
+    {
+        BossLives--;
+        Debug.Log($"Boss lives = {BossLives}");
+        CheckGameOver();
+    }
+
+    public int GetPlayerScore(PlayerNumber playerNumber)
     {
         return playerNumber == PlayerNumber.PlayerOne ? Player1Score : Player2Score;
+    }
+
+    public void CheckGameOver()
+    {
+        if (!IsGameOver) return;
+
+        // Show game over panel
+        _gameoverPanelController.SetGameOverTitle(BossLives <= 0 ? "You win" : "You lose");
+        SaveSystem.SaveLeaderboardEntry(new LeaderboardEntry
+        {
+            PlayerName = SaveSystem.Load().GetPlayerName(PlayerNumber.PlayerOne),
+            Score = Player1Score
+        });
+        SaveSystem.SaveLeaderboardEntry(new LeaderboardEntry
+        {
+            PlayerName = SaveSystem.Load().GetPlayerName(PlayerNumber.PlayerTwo),
+            Score = Player2Score
+        });
+
+        _gameoverPanelController.ShowLeaderboardEntries();
+
+        _gameoverPanelController.gameObject.SetActive(true);
+
+        Time.timeScale = 0; // Pause the game
     }
 }

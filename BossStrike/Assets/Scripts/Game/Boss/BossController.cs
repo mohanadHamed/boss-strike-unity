@@ -18,6 +18,9 @@ public class BossController : MonoBehaviour
     private float _afterAttackDelay = 1f;
 
     [SerializeField]
+    private float _afterRockAttackDelay = 3f;
+
+    [SerializeField]
     private float _bossFlyHeight = 20f;
 
     [SerializeField]
@@ -32,6 +35,15 @@ public class BossController : MonoBehaviour
 
     [SerializeField]
     private GameObject _shadowPrefab;
+
+    [SerializeField]
+    private GameObject _rocketPrefab;
+
+    [SerializeField]
+    private float _rocketSpeed = 50f;
+
+    [SerializeField]
+    private float _explodeRadius = 15f;
 
     private GameObject _targetPlayer;
     private bool _isAttacking = false;
@@ -112,8 +124,8 @@ public class BossController : MonoBehaviour
         LockBeforeAttack();
 
         // Randomly choose between flame attack and eagle strike
-        // 0 = flame attack, 1 = eagle strike
-        var randomAttack = Random.Range(0, 2);
+        // 0 = flame attack, 1 = eagle strike, 2 = rocket attack
+        var randomAttack = Random.Range(0, 3);
         switch(randomAttack)
         {
             case 0:
@@ -124,13 +136,26 @@ public class BossController : MonoBehaviour
                 Debug.Log("Performing Eagle Strike");
                 yield return PerformEagleStrike();
                 break;
+            case 2:
             default:
-                Debug.LogError("Invalid attack type");
+                Debug.Log("Performing Rocket Attack");
+                yield return AttackWith3Rockets();
                 break;
         }
 
         _targetPlayer = null; // so boss picks a new one next time
         _allowAttack = true;
+    }
+
+    private IEnumerator AttackWith3Rockets()
+    {
+        yield return PerformRocketAttack(true);
+        yield return PerformRocketAttack(true);
+        yield return PerformRocketAttack(false);
+
+        yield return new WaitForSeconds(_afterRockAttackDelay);
+
+        _isAttacking = false;
     }
 
     private IEnumerator PerformFlameAttack()
@@ -161,7 +186,7 @@ public class BossController : MonoBehaviour
                 var playerController = hit.collider.GetComponent<PlayerController>();
                 if (playerController != null)
                 {
-                    GameplayManager.Instance.DecreasePlayerLives(playerController.PlayerNumber);
+                    GameplayManager.Instance.DecreasePlayerLives(playerController);
                     yield return playerController.ReceiveHit();
                 }
             }
@@ -209,13 +234,35 @@ public class BossController : MonoBehaviour
                 var playerController = col.GetComponent<PlayerController>();
                 if (playerController != null)
                 {
-                    GameplayManager.Instance.DecreasePlayerLives(playerController.PlayerNumber);
+                    GameplayManager.Instance.DecreasePlayerLives(playerController);
                     yield return playerController.ReceiveHit();
                 }
             }
         }
 
         yield return new WaitForSeconds(_afterAttackDelay);
+    }
+
+    private IEnumerator PerformRocketAttack(bool canExplode)
+    {
+        yield return new WaitForSeconds(_beforeAttackDelay);
+
+        Vector3 origin = transform.position + Vector3.right * 15f;
+        var endPoint = canExplode ? _targetPos : Vector3.zero;
+
+        Vector3 direction = (endPoint - origin).normalized;
+
+        GameObject rocket = Instantiate(_rocketPrefab, origin, Quaternion.LookRotation(direction, Vector3.up));
+
+        // 2. Assign target to rocket
+        RocketProjectile rocketScript = rocket.GetComponent<RocketProjectile>();
+        if (rocketScript != null)
+        {
+            rocketScript.SetTarget(endPoint);
+            rocketScript.SetSpeed(_rocketSpeed);
+            rocketScript.SetExplodingRocket(canExplode);
+            rocketScript.SetExplosionRadius(_explodeRadius);
+        }
     }
 
 
