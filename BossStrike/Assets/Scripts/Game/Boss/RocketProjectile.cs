@@ -45,6 +45,17 @@ public class RocketProjectile : MonoBehaviour
         _throwingPlayerController = playerController;
     }
 
+    public void DestroyAfter(float delay)
+    {
+        StartCoroutine(DestroyAfterCoroutine(delay));
+    }
+
+    private IEnumerator DestroyAfterCoroutine(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        Destroy(gameObject);
+    }
+
     private void Awake()
     {
         _audioSource = GetComponent<AudioSource>();
@@ -65,9 +76,9 @@ public class RocketProjectile : MonoBehaviour
 
     private IEnumerator OnCollisionEnter(Collision collision)
     {
-        var collideWithPlayer = collision.collider.CompareTag("Player");
-        var collideWithFloor = collision.collider.CompareTag("Floor");
-        var collideWithBoss = collision.collider.CompareTag("Boss");
+        var collideWithPlayer = collision.collider.CompareTag(GameplayManager.PlayerTag);
+        var collideWithFloor = collision.collider.CompareTag(GameplayManager.FloorTag);
+        var collideWithBoss = collision.collider.CompareTag(GameplayManager.BossTag);
 
         if (!_canExplode)
         {
@@ -109,7 +120,7 @@ public class RocketProjectile : MonoBehaviour
             var players = Physics.OverlapSphere(transform.position, _explodeRadius, _playerLayer);
             foreach (Collider col in players)
             {
-                if (col.CompareTag("Player"))
+                if (col.CompareTag(GameplayManager.PlayerTag))
                 {
                     var playerController = col.GetComponent<PlayerController>();
                     if (playerController != null)
@@ -155,7 +166,7 @@ public class RocketProjectile : MonoBehaviour
         GameplayManager.Instance.PlaySfxAudio(_audioSource, GameplayManager.Instance.LaunchRocketAudio);
 
         var rocket = Instantiate(GameplayManager.Instance.RocketPrefab, origin, Quaternion.LookRotation(direction, Vector3.up));
-        rocket.layer = LayerMask.NameToLayer("PlayerRocket");
+        rocket.layer = LayerMask.NameToLayer(GameplayManager.NonExplodingRocketLayerName);
 
         var rocketScript = rocket.GetComponent<RocketProjectile>();
         if (rocketScript != null)
@@ -165,6 +176,7 @@ public class RocketProjectile : MonoBehaviour
             rocketScript.SetSpeed(50);
             rocketScript.SetExplodingRocket(true);
             rocketScript.SetExplosionRadius(_explodeRadius);
+            rocketScript.DestroyAfter(3f);
         }
     }
 }

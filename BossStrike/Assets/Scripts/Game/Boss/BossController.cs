@@ -1,6 +1,4 @@
 using System.Collections;
-using System.Net;
-using UnityEditor.Rendering.LookDev;
 using UnityEngine;
 
 public class BossController : MonoBehaviour
@@ -92,7 +90,7 @@ public class BossController : MonoBehaviour
     {
         if (_targetPlayer != null) return;
 
-        var players = GameObject.FindGameObjectsWithTag("Player");
+        var players = GameObject.FindGameObjectsWithTag(GameplayManager.PlayerTag);
         if (players.Length == 0) return;
 
         _targetPlayer = players[Random.Range(0, players.Length)];
@@ -197,7 +195,7 @@ public class BossController : MonoBehaviour
         // Raycast flame
         if (Physics.Raycast(origin, direction, out RaycastHit hit, _attackDistance))
         {
-            if (hit.collider.CompareTag("Player"))
+            if (hit.collider.CompareTag(GameplayManager.PlayerTag))
             {
                 var playerController = hit.collider.GetComponent<PlayerController>();
                 if (playerController != null)
@@ -248,7 +246,7 @@ public class BossController : MonoBehaviour
         Collider[] hitPlayers = Physics.OverlapSphere(transform.position, _strikeHitRadius);
         foreach (Collider col in hitPlayers)
         {
-            if (col.CompareTag("Player"))
+            if (col.CompareTag(GameplayManager.PlayerTag))
             {
                 var playerController = col.GetComponent<PlayerController>();
                 if (playerController != null)
@@ -273,7 +271,7 @@ public class BossController : MonoBehaviour
         var direction = (endPoint - origin).normalized;
 
         GameObject rocket = Instantiate(_rocketPrefab, origin, Quaternion.LookRotation(direction, Vector3.up));
-        rocket.layer = LayerMask.NameToLayer("Rocket");
+        rocket.layer = LayerMask.NameToLayer(GameplayManager.RocketLayerName);
 
         // 2. Assign target to rocket
         RocketProjectile rocketScript = rocket.GetComponent<RocketProjectile>();

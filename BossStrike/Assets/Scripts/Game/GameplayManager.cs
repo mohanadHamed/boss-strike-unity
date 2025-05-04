@@ -7,6 +7,12 @@ public class GameplayManager : MonoBehaviour
 {
     public static GameplayManager Instance { get; private set; }
 
+    public const string PlayerTag = "Player";
+    public const string BossTag = "Boss";
+    public const string FloorTag = "Floor";
+    public const string RocketLayerName = "Rocket";
+    public const string NonExplodingRocketLayerName = "PlayerRocket";
+
     public int Player1Score { get; set; }
     public int Player2Score { get; set; }
 
