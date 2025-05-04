@@ -42,11 +42,12 @@ public static class SaveSystem
             entries.Add(entry);
         }
 
+        entries = entries.OrderByDescending(e => e.Score).ToList();
         if (entries.Count > 10)
         {
             entries.RemoveAt(10);
         }
-        entries = entries.OrderByDescending(e => e.Score).ToList();
+
         data.LeaderboardEntries = entries.ToArray();
         Save(data);
     }

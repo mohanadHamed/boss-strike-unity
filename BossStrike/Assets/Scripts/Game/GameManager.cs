@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering;
@@ -7,8 +8,8 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager Instance { get; private set; }
 
-    public PlayerCharacter Player1Character { get; set; }
-    public PlayerCharacter Player2Character { get; set; }
+    public PlayerCharacter Player1Character { get; private set; }
+    public PlayerCharacter Player2Character { get; private set; }
 
     [SerializeField]
     private Texture[] _playerCharacterTextures;
@@ -35,6 +36,23 @@ public class GameManager : MonoBehaviour
         return playerNumber == PlayerNumber.PlayerOne
             ? _playerCharacterMaterialMap[Player1Character]
             : _playerCharacterMaterialMap[Player2Character];
+    }
+
+    public void SetPlayerCharacter(PlayerNumber playerNumber, PlayerCharacter newCharacter)
+    {
+        var saveData = SaveSystem.Load();
+        if(playerNumber == PlayerNumber.PlayerOne)
+        {
+            Player1Character = newCharacter;
+            saveData.Player1Character = newCharacter.ToString();
+        }
+        else
+        {
+            Player2Character = newCharacter;
+            saveData.Player2Character = newCharacter.ToString();
+        }
+
+        SaveSystem.Save(saveData);
     }
 
     public void UpdateBgmVolume()
@@ -83,8 +101,9 @@ public class GameManager : MonoBehaviour
             { PlayerCharacter.Yellow, _playerCharacterMaterials[(int) PlayerCharacter.Yellow] }
         };
 
-        Player1Character = PlayerCharacter.Blue; // Default character for Player 1
-        Player2Character = PlayerCharacter.Yellow; // Default character for Player 2
+        var saveData = SaveSystem.Load();
+        Player1Character = Enum.Parse<PlayerCharacter>(saveData.Player1Character);
+        Player2Character = Enum.Parse<PlayerCharacter>(saveData.Player2Character);
 
         _bgmAudioSource = GetComponent<AudioSource>();
     }

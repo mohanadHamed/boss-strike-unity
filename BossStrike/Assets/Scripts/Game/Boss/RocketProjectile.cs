@@ -5,9 +5,6 @@ using UnityEngine;
 public class RocketProjectile : MonoBehaviour
 {
     [SerializeField]
-    private float _rotationSpeed = 720f; // degrees per second
-
-    [SerializeField]
     private GameObject _explosionPrefab;
 
     private LayerMask playerLayer;
@@ -150,7 +147,7 @@ public class RocketProjectile : MonoBehaviour
     private void PerformRocketAttackAgainstBoss(PlayerController playerController)
     {
         var targetPosition = GameplayManager.Instance.BossInstance.transform.position;
-        Vector3 origin = transform.position + Vector3.up * 30f;
+        Vector3 origin = playerController.transform.position + Vector3.up * 5f;
         var endPoint = targetPosition;
 
         Vector3 direction = (endPoint - origin).normalized;

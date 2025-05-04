@@ -58,7 +58,7 @@ public class SelectCharacterController : MonoBehaviour
     {
         int currentIndex = (int)GameManager.Instance.Player1Character;
         int nextIndex = (currentIndex + 1) % _allCharacters.Length;
-        GameManager.Instance.Player1Character = _allCharacters[nextIndex];
+        GameManager.Instance.SetPlayerCharacter(PlayerNumber.PlayerOne, _allCharacters[nextIndex]);
         _player1Image.texture = GameManager.Instance.GetTextureForPlayer(PlayerNumber.PlayerOne);
     }
 
@@ -66,7 +66,7 @@ public class SelectCharacterController : MonoBehaviour
     {
         int currentIndex = (int)GameManager.Instance.Player2Character;
         int nextIndex = (currentIndex + 1) % _allCharacters.Length;
-        GameManager.Instance.Player2Character = _allCharacters[nextIndex];
+        GameManager.Instance.SetPlayerCharacter(PlayerNumber.PlayerTwo, _allCharacters[nextIndex]);
         _player2Image.texture = GameManager.Instance.GetTextureForPlayer(PlayerNumber.PlayerTwo);
     }
 
@@ -74,7 +74,7 @@ public class SelectCharacterController : MonoBehaviour
     {
         int currentIndex = (int)GameManager.Instance.Player1Character;
         int prevIndex = (currentIndex - 1 + _allCharacters.Length) % _allCharacters.Length;
-        GameManager.Instance.Player1Character = _allCharacters[prevIndex];
+        GameManager.Instance.SetPlayerCharacter(PlayerNumber.PlayerOne, _allCharacters[prevIndex]);
         _player1Image.texture = GameManager.Instance.GetTextureForPlayer(PlayerNumber.PlayerOne);
         }
 
@@ -82,7 +82,7 @@ public class SelectCharacterController : MonoBehaviour
     {
         int currentIndex = (int)GameManager.Instance.Player2Character;
         int prevIndex = (currentIndex - 1 + _allCharacters.Length) % _allCharacters.Length;
-        GameManager.Instance.Player2Character = _allCharacters[prevIndex];
+        GameManager.Instance.SetPlayerCharacter(PlayerNumber.PlayerTwo, _allCharacters[prevIndex]);
         _player2Image.texture = GameManager.Instance.GetTextureForPlayer(PlayerNumber.PlayerTwo);
     }
 }

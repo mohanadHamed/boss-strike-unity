@@ -14,6 +14,8 @@ public class GameSaveData
     public string Player2Name = "Player 2";
     public bool SoundMusicEnabled = true;
     public bool SoundEffectsEnabled = true;
+    public string Player1Character = PlayerCharacter.Blue.ToString();
+    public string Player2Character = PlayerCharacter.Yellow.ToString();
 
     public LeaderboardEntry[] LeaderboardEntries = new LeaderboardEntry[10];
 
