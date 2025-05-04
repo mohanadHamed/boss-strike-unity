@@ -1,7 +1,7 @@
 
 # boss-strike-unity
 
-**Boss Strike** is a 3D local co-op action game built in Unity. Up to two players team up to battle a powerful boss that uses multiple attack patterns like fire flame, rocket strikes, and aerial dives.
+**Boss Strike** is a 3D local co-op action game built in Unity. Two-player team up to battle a powerful boss that uses multiple attack patterns like fire flame, rocket strikes, and eagle strikes.
 
 ## 🔥 Game Features
 
@@ -9,17 +9,17 @@
 - A challenging boss with:
   - Fire Flame attacks
   - Rocket homing attacks
-  - Aerial Eagle Strike dive attacks
-- Humanoid animated characters with run/idle animation states
+  - Eagle Strike dive attacks
+- Humanoid animated characters with run/idle/hit animation states
 - Scene loading with progress feedback
-- Game data saving and loading (player names, sound settings, leaderboard)
+- Game data saving and loading (player names, characters, sound settings, leaderboard)
 
 ## 🎮 Controls
 
 | Player | Move            | Run/Stop           |
 |--------|---------------- |--------------------|
 | P1     | WASD            | Hold/Release       |
-| P2     | NUMPAD(8/4/6/2) |  Hold/Release      |
+| P2     | NUMPAD(8/4/6/2) | Hold/Release       |
 
 ## 💾 Saving System
 
@@ -34,8 +34,8 @@
 The boss selects a random player and:
 - Moves toward them
 - Uses different attacks based on range
-- Rotates and locks position during Eagle Strike
-- Uses raycast-based fire beams and homing rockets
+- Rotates and locks position during attack
+- Uses raycast-based fire beams and rockets
 
 ## 🛠 Tech Stack
 
@@ -56,14 +56,15 @@ Assets/
 ├── Scenes/
 ├── Resources/
 ├── Sounds/
+├── Animations/
 └── Materials/
 ```
 
 ## 🚀 Getting Started
 
 1. Clone the repo
-2. Open the project in Unity
-3. Open the scene `MainScene`
+2. Open the project in Unity (project Unity versino 6000.048f1)
+3. Open the scene `MainMenu`
 4. Hit Play!
 
 ## Screenshots
