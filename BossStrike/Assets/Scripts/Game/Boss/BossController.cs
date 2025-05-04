@@ -92,7 +92,7 @@ public class BossController : MonoBehaviour
     {
         if (_targetPlayer != null) return;
 
-        GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
+        var players = GameObject.FindGameObjectsWithTag("Player");
         if (players.Length == 0) return;
 
         _targetPlayer = players[Random.Range(0, players.Length)];
@@ -154,7 +154,7 @@ public class BossController : MonoBehaviour
                 break;
         }
 
-        _targetPlayer = null; // so boss picks a new one next time
+        _targetPlayer = null;
         _allowAttack = true;
     }
 
@@ -179,10 +179,10 @@ public class BossController : MonoBehaviour
 
         GameplayManager.Instance.PlaySfxAudio(_audioSource, GameplayManager.Instance.FlameAttackAudio);
 
-        Vector3 origin = transform.position + Vector3.up * 1f;
+        var origin = transform.position + Vector3.up * 1f;
         var endPoint = _targetPos + Vector3.up * 10f;
 
-        Vector3 direction = (endPoint - origin).normalized;
+        var direction = (endPoint - origin).normalized;
 
         // Draw fire ray
         _lineRenderer.SetPosition(0, origin);
@@ -195,8 +195,7 @@ public class BossController : MonoBehaviour
         _isAttacking = false;
 
         // Raycast flame
-        RaycastHit hit;
-        if (Physics.Raycast(origin, direction, out hit, _attackDistance))
+        if (Physics.Raycast(origin, direction, out RaycastHit hit, _attackDistance))
         {
             if (hit.collider.CompareTag("Player"))
             {
@@ -215,13 +214,13 @@ public class BossController : MonoBehaviour
     {
 
         // 1. Get player position and spawn shadow
-        Vector3 targetPos = _targetPlayer.transform.position;
+        var targetPos = _targetPlayer.transform.position;
         var shadowInstance = Instantiate(_shadowPrefab, new Vector3(targetPos.x, _shadowYPos, targetPos.z), Quaternion.identity);
 
         GameplayManager.Instance.PlaySfxAudio(_audioSource, GameplayManager.Instance.EagleStrikeFlyAudio);
 
         // 2. Move boss high above target position
-        Vector3 strikeStartPos = new Vector3(targetPos.x, targetPos.y + _strikeHeight, targetPos.z);
+        var strikeStartPos = new Vector3(targetPos.x, targetPos.y + _strikeHeight, targetPos.z);
         transform.position = strikeStartPos;
 
         // 3. Wait 1 second to lock strike position
@@ -230,7 +229,7 @@ public class BossController : MonoBehaviour
         // 4. Descend toward target position
         while (transform.position.y > _shadowYPos)
         {
-            Vector3 downward = Vector3.down;
+            var downward = Vector3.down;
             transform.position += downward * _descendSpeed * Time.deltaTime;
             yield return null;
         }
@@ -268,10 +267,10 @@ public class BossController : MonoBehaviour
 
         GameplayManager.Instance.PlaySfxAudio(_audioSource, GameplayManager.Instance.LaunchRocketAudio);
 
-        Vector3 origin = transform.position + Vector3.up * 30f;
+        var origin = transform.position + Vector3.up * 30f;
         var endPoint = canExplode ? _targetPos : new Vector3(Random.Range(-80f, 80f), 0, Random.Range(-40f, 40f));
 
-        Vector3 direction = (endPoint - origin).normalized;
+        var direction = (endPoint - origin).normalized;
 
         GameObject rocket = Instantiate(_rocketPrefab, origin, Quaternion.LookRotation(direction, Vector3.up));
         rocket.layer = LayerMask.NameToLayer("Rocket");
@@ -294,7 +293,7 @@ public class BossController : MonoBehaviour
         _targetPos = _targetPlayer.transform.position;
         var lookDir = (_targetPos - transform.position).normalized;
         lookDir.y = 0f; // Keep rotation horizontal only
-        Quaternion targetRotation = Quaternion.LookRotation(lookDir);
+        var targetRotation = Quaternion.LookRotation(lookDir);
         transform.rotation = targetRotation;
     }
 }

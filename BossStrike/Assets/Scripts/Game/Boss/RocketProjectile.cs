@@ -7,7 +7,7 @@ public class RocketProjectile : MonoBehaviour
     [SerializeField]
     private GameObject _explosionPrefab;
 
-    private LayerMask playerLayer;
+    private LayerMask _playerLayer;
 
     private float _explodeRadius;
 
@@ -52,14 +52,14 @@ public class RocketProjectile : MonoBehaviour
 
     private void Start()
     {
-        playerLayer = LayerMask.GetMask("Player");
+        _playerLayer = LayerMask.GetMask("Player");
     }
 
     private void Update()
     {
         // Move toward target
-        Vector3 direction = (_targetPosition - transform.position).normalized;
-        transform.position += direction * _speed * Time.deltaTime;
+        var direction = (_targetPosition - transform.position).normalized;
+        transform.position += _speed * Time.deltaTime * direction;
     }
 
 
@@ -106,7 +106,7 @@ public class RocketProjectile : MonoBehaviour
         }
         else if (collideWithFloor)
         {
-            Collider[] players = Physics.OverlapSphere(transform.position, _explodeRadius, playerLayer);
+            var players = Physics.OverlapSphere(transform.position, _explodeRadius, _playerLayer);
             foreach (Collider col in players)
             {
                 if (col.CompareTag("Player"))
@@ -147,18 +147,17 @@ public class RocketProjectile : MonoBehaviour
     private void PerformRocketAttackAgainstBoss(PlayerController playerController)
     {
         var targetPosition = GameplayManager.Instance.BossInstance.transform.position;
-        Vector3 origin = playerController.transform.position + Vector3.up * 5f;
+        var origin = playerController.transform.position + Vector3.up * 5f;
         var endPoint = targetPosition;
 
-        Vector3 direction = (endPoint - origin).normalized;
+        var direction = (endPoint - origin).normalized;
 
         GameplayManager.Instance.PlaySfxAudio(_audioSource, GameplayManager.Instance.LaunchRocketAudio);
 
-        GameObject rocket = Instantiate(GameplayManager.Instance.RocketPrefab, origin, Quaternion.LookRotation(direction, Vector3.up));
+        var rocket = Instantiate(GameplayManager.Instance.RocketPrefab, origin, Quaternion.LookRotation(direction, Vector3.up));
         rocket.layer = LayerMask.NameToLayer("PlayerRocket");
 
-        // 2. Assign target to rocket
-        RocketProjectile rocketScript = rocket.GetComponent<RocketProjectile>();
+        var rocketScript = rocket.GetComponent<RocketProjectile>();
         if (rocketScript != null)
         {
             rocketScript.SetThrowingPlayerController(playerController);

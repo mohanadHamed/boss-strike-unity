@@ -184,7 +184,7 @@ public class PlayerController : MonoBehaviour
 
     private void RotateToAngle(float angleY)
     {
-        Quaternion targetRotation = Quaternion.Euler(0f, angleY, 0f);
+        var targetRotation = Quaternion.Euler(0f, angleY, 0f);
         transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, _rotationSpeed * Time.deltaTime);
     }
 }

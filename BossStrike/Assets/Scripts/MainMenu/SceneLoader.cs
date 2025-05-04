@@ -43,7 +43,6 @@ public class SceneLoader : MonoBehaviour
         }
     }
 
-    // Optional: use this if loading is triggered from a button
     public void LoadTargetScene(string sceneName)
     {
         StartCoroutine(LoadSceneAsync(sceneName));

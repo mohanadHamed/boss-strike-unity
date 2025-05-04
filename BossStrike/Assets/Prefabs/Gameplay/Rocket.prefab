@@ -4969,7 +4969,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0d4b655b90110c941a12b26641cfc8c1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _rotationSpeed: 720
   _explosionPrefab: {fileID: 494610871612957960, guid: 8adf82acab441fc44a1e3c2316c4a5ba, type: 3}
 --- !u!114 &7492450483507674624
 MonoBehaviour:
@@ -5010,7 +5009,7 @@ Rigidbody:
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 0
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
 --- !u!136 &1233009545741992060
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -5030,10 +5029,10 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 1.5353332
-  m_Height: 8.726316
+  m_Radius: 2
+  m_Height: 9
   m_Direction: 2
-  m_Center: {x: 0.61, y: -0.27, z: 0.0008420348}
+  m_Center: {x: 0.1, y: -0.64, z: 0.65}
 --- !u!82 &6041896283471587623
 AudioSource:
   m_ObjectHideFlags: 0

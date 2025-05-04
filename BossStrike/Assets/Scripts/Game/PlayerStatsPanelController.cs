@@ -35,20 +35,15 @@ public class PlayerStatsPanelController : MonoBehaviour
     }
     public void UpdatePlayerScoreText()
     {
-        // Update the player score text
         _playerScoreText.text = $"Score: {GameplayManager.Instance.GetPlayerScore(_playerNumber)}";
     }
 
     private void Start()
     {
-        // Set the player name text
         _playerNameText.text = SaveSystem.Load().GetPlayerName(_playerNumber);
-        // Set the character image
         _characterImage.texture = GameManager.Instance.GetTextureForPlayer(_playerNumber);
-        // Set the heart images based on player lives
         UpdateHeartImages(GameplayManager.Instance.Player1Lives);
 
-        // Update the player score text
         UpdatePlayerScoreText();
     }
 }

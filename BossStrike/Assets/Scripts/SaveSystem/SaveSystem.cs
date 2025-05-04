@@ -10,7 +10,7 @@ public static class SaveSystem
 
     public static void Save(GameSaveData data)
     {
-        string json = JsonUtility.ToJson(data, true);
+        var json = JsonUtility.ToJson(data, true);
 
         File.WriteAllText(path, json);
     }

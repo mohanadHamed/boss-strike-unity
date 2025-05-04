@@ -19,6 +19,15 @@ public class GameplayManager : MonoBehaviour
 
     public bool IsGameOver => (Player1Lives <= 0 && Player2Lives <= 0) || BossLives <= 0;
 
+    public AudioClip FlameAttackAudio;
+    public AudioClip EagleStrikeFlyAudio;
+    public AudioClip EagleStrikeSlamAudio;
+    public AudioClip LaunchRocketAudio;
+    public AudioClip ExplodeAudio;
+    public AudioClip PlayerHitAudio;
+    public AudioClip PlayerScreamAudio;
+    public AudioClip BossHitAudio;
+
     [SerializeField]
     private PlayerStatsPanelController _player1HealthPanelController;
     [SerializeField]
@@ -33,14 +42,6 @@ public class GameplayManager : MonoBehaviour
     [SerializeField]
     private GameoverPanelController _gameoverPanelController;
 
-    public AudioClip FlameAttackAudio;
-    public AudioClip EagleStrikeFlyAudio;
-    public AudioClip EagleStrikeSlamAudio;
-    public AudioClip LaunchRocketAudio;
-    public AudioClip ExplodeAudio;
-    public AudioClip PlayerHitAudio;
-    public AudioClip PlayerScreamAudio;
-    public AudioClip BossHitAudio;
 
     public int GetLivesForPlayer(PlayerNumber playerNumber)
     {
