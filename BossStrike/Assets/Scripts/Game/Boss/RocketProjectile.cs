@@ -56,10 +56,6 @@ public class RocketProjectile : MonoBehaviour
         // Move toward target
         Vector3 direction = (_targetPosition - transform.position).normalized;
         transform.position += direction * _speed * Time.deltaTime;
-
-        // Rotate rocket to face target (assumes rocket points up by default)
-       // Quaternion lookRotation = Quaternion.LookRotation(direction, transform.forward);
-       // transform.rotation = lookRotation;
     }
 
 
@@ -69,7 +65,6 @@ public class RocketProjectile : MonoBehaviour
         var collideWithFloor = collision.collider.CompareTag("Floor");
         var collideWithBoss = collision.collider.CompareTag("Boss");
 
-
         if (!_canExplode)
         {
             if (collideWithPlayer)
@@ -77,17 +72,15 @@ public class RocketProjectile : MonoBehaviour
                 var playerController = collision.collider.GetComponent<PlayerController>();
                 if (playerController != null)
                 {
-                    PerformRocketAttackAgainsBoss(playerController);
+                    DisableVisibilityAndCollision();
+                    PerformRocketAttackAgainstBoss(playerController);
                     Destroy(gameObject);
                 }
             }
             yield break;
         }
 
-        GetComponent<Rigidbody>().isKinematic = true;
-        GetComponent<Collider>().enabled = false;
-        GetComponent<Renderer>().enabled = false;
-
+        DisableVisibilityAndCollision();
 
         var shouldExplode = collideWithFloor || collideWithPlayer || collideWithBoss;
 
@@ -135,7 +128,18 @@ public class RocketProjectile : MonoBehaviour
         Destroy(gameObject);
     }
 
-    private void PerformRocketAttackAgainsBoss(PlayerController playerController)
+    private void DisableVisibilityAndCollision()
+    {
+        var rigidBocdy = GetComponent<Rigidbody>();
+        var collider = GetComponent<Collider>();
+        var renderer = GetComponentInChildren<Renderer>();
+
+        rigidBocdy.isKinematic = true;
+        collider.enabled = false;
+        renderer.enabled = false;
+    }
+
+    private void PerformRocketAttackAgainstBoss(PlayerController playerController)
     {
         var targetPosition = GameplayManager.Instance.BossInstance.transform.position;
         Vector3 origin = transform.position + Vector3.up * 30f;
@@ -144,6 +148,7 @@ public class RocketProjectile : MonoBehaviour
         Vector3 direction = (endPoint - origin).normalized;
 
         GameObject rocket = Instantiate(GameplayManager.Instance.RocketPrefab, origin, Quaternion.LookRotation(direction, Vector3.up));
+        rocket.layer = LayerMask.NameToLayer("PlayerRocket");
 
         // 2. Assign target to rocket
         RocketProjectile rocketScript = rocket.GetComponent<RocketProjectile>();

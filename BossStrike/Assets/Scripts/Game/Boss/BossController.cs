@@ -150,7 +150,9 @@ public class BossController : MonoBehaviour
     private IEnumerator AttackWith3Rockets()
     {
         yield return PerformRocketAttack(true);
+        yield return new WaitForSeconds(0.5f);
         yield return PerformRocketAttack(true);
+        yield return new WaitForSeconds(0.5f);
         yield return PerformRocketAttack(false);
 
         yield return new WaitForSeconds(_afterRockAttackDelay);
@@ -247,12 +249,13 @@ public class BossController : MonoBehaviour
     {
         yield return new WaitForSeconds(_beforeAttackDelay);
 
-        Vector3 origin = transform.position + Vector3.right * 15f;
+        Vector3 origin = transform.position + Vector3.up * 30f;
         var endPoint = canExplode ? _targetPos : Vector3.zero;
 
         Vector3 direction = (endPoint - origin).normalized;
 
         GameObject rocket = Instantiate(_rocketPrefab, origin, Quaternion.LookRotation(direction, Vector3.up));
+        rocket.layer = LayerMask.NameToLayer("Rocket");
 
         // 2. Assign target to rocket
         RocketProjectile rocketScript = rocket.GetComponent<RocketProjectile>();

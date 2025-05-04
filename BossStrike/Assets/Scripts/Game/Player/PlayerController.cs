@@ -116,6 +116,8 @@ public class PlayerController : MonoBehaviour
     private void Update()
     {
         HandleInput();
+
+        GameplayManager.Instance.IncreasePlayerScore(_playerNumber, _moveDirection != Vector3.zero ? 2 : 1);
     }
 
     private void FixedUpdate()
