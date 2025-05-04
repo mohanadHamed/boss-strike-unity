@@ -1128,6 +1128,14 @@ MonoBehaviour:
   _bossInstance: {fileID: 4341768849743224859}
   _rocketPrefab: {fileID: 4354966341147443440, guid: 72cd84eb8aed6b148a3bfac76a1c708b, type: 3}
   _gameoverPanelController: {fileID: 1611563667}
+  FlameAttackAudio: {fileID: 8300000, guid: 5a6b837427088c2429fdbd13ae1767e6, type: 3}
+  EagleStrikeFlyAudio: {fileID: 8300000, guid: 5217124b96d335c46996e00b2a8d4fef, type: 3}
+  EagleStrikeSlamAudio: {fileID: 8300000, guid: 4f9fa8f2b39cb374a8f6052d94b931ac, type: 3}
+  LaunchRocketAudio: {fileID: 8300000, guid: 63fb5865909066b46a21d2bd58a1301a, type: 3}
+  ExplodeAudio: {fileID: 8300000, guid: f875dd82432c78e4f8712341bccdb360, type: 3}
+  PlayerHitAudio: {fileID: 8300000, guid: a017bef209cec4d41a4baf2d56672091, type: 3}
+  PlayerScreamAudio: {fileID: 8300000, guid: 5d4e1579c704c044eb9ad5f1d600d6da, type: 3}
+  BossHitAudio: {fileID: 8300000, guid: 427b21857d11d6f42b914e77e7496cb6, type: 3}
 --- !u!4 &680130341
 Transform:
   m_ObjectHideFlags: 0

@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using TMPro;
 using UnityEngine;
 
@@ -31,6 +32,15 @@ public class GameplayManager : MonoBehaviour
 
     [SerializeField]
     private GameoverPanelController _gameoverPanelController;
+
+    public AudioClip FlameAttackAudio;
+    public AudioClip EagleStrikeFlyAudio;
+    public AudioClip EagleStrikeSlamAudio;
+    public AudioClip LaunchRocketAudio;
+    public AudioClip ExplodeAudio;
+    public AudioClip PlayerHitAudio;
+    public AudioClip PlayerScreamAudio;
+    public AudioClip BossHitAudio;
 
     public int GetLivesForPlayer(PlayerNumber playerNumber)
     {
@@ -114,10 +124,16 @@ public class GameplayManager : MonoBehaviour
         CheckGameOver();
     }
 
-    public void DecreaseBossLives()
+    public IEnumerator DecreaseBossLives()
     {
         BossLives--;
         Debug.Log($"Boss lives = {BossLives}");
+        if(BossLives <= 0)
+        {
+            _bossInstance.SetActive(false);
+        }
+
+        yield return new WaitForSeconds(1.0f);
         CheckGameOver();
     }
 
@@ -148,5 +164,15 @@ public class GameplayManager : MonoBehaviour
         _gameoverPanelController.gameObject.SetActive(true);
 
         Time.timeScale = 0; // Pause the game
+    }
+
+    public void PlaySfxAudio(AudioSource audioSource, AudioClip audioClip)
+    {
+        if (audioSource == null || audioClip == null) return;
+        
+        if (!SaveSystem.Load().SoundEffectsEnabled) return;
+        
+        audioSource.clip = audioClip;
+        audioSource.Play();
     }
 }

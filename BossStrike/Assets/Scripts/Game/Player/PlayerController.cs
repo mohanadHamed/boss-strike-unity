@@ -32,6 +32,8 @@ public class PlayerController : MonoBehaviour
 
     private bool _receivingHit = false;
 
+    private AudioSource _audioSource;
+
     private readonly Dictionary<PlayerInput, KeyCode> _player1InputMappings = new()
     {
         { PlayerInput.MoveLeft, KeyCode.A },
@@ -68,6 +70,10 @@ public class PlayerController : MonoBehaviour
             yield break;
         }
 
+        GameplayManager.Instance.DecreasePlayerLives(this);
+
+        GameplayManager.Instance.PlaySfxAudio(_audioSource, GameplayManager.Instance.GetLivesForPlayer(_playerNumber) > 0 ? GameplayManager.Instance.PlayerHitAudio : GameplayManager.Instance.PlayerScreamAudio);
+
         _receivingHit = true;
         _moveDirection = Vector3.zero;
         _animator.ResetTrigger(AnimationStates.Run);
@@ -78,6 +84,8 @@ public class PlayerController : MonoBehaviour
 
         if(GameplayManager.Instance.GetLivesForPlayer(_playerNumber) <= 0)
         {
+            yield return new WaitForSeconds(0.5f);
+            _receivingHit = false;
             gameObject.SetActive(false);
             yield break;
         }
@@ -94,6 +102,8 @@ public class PlayerController : MonoBehaviour
             { PlayerNumber.PlayerOne,  _player1InputMappings},
             { PlayerNumber.PlayerTwo,  _player2InputMappings}
         };
+
+        _audioSource = GetComponent<AudioSource>();
     }
 
     private void Start()

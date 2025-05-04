@@ -22,6 +22,8 @@ public class SettingsController : MonoBehaviour
         var data = SaveSystem.Load();
         data.SoundMusicEnabled = isOn;
         SaveSystem.Save(data);
+
+        GameManager.Instance.UpdateBgmVolume();
     }
 
     public void OnSoundEffectsToggleChanged(bool isOn)

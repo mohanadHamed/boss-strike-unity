@@ -21,6 +21,8 @@ public class RocketProjectile : MonoBehaviour
 
     private PlayerController _throwingPlayerController;
 
+    private AudioSource _audioSource;
+
     public void SetTarget(Vector3 targetPosition)
     {
         _targetPosition = targetPosition;
@@ -44,6 +46,11 @@ public class RocketProjectile : MonoBehaviour
     public void SetThrowingPlayerController(PlayerController playerController)
     {
         _throwingPlayerController = playerController;
+    }
+
+    private void Awake()
+    {
+        _audioSource = GetComponent<AudioSource>();
     }
 
     private void Start()
@@ -88,7 +95,8 @@ public class RocketProjectile : MonoBehaviour
         {
             // Instantiate explosion effect
             GameObject explosion = Instantiate(_explosionPrefab, transform.position, Quaternion.identity);
-            //explosion.transform.localScale = new Vector3(_explodeRadius, _explodeRadius, _explodeRadius);
+            var explosionAudioSource = explosion.GetComponent<AudioSource>();
+            GameplayManager.Instance.PlaySfxAudio(explosionAudioSource, GameplayManager.Instance.ExplodeAudio);
         }
 
         if (collideWithPlayer)
@@ -96,7 +104,6 @@ public class RocketProjectile : MonoBehaviour
             var playerController = collision.collider.GetComponent<PlayerController>();
             if (playerController != null)
             {
-                GameplayManager.Instance.DecreasePlayerLives(playerController);
                 yield return playerController.ReceiveHit();
             }
         }
@@ -110,7 +117,6 @@ public class RocketProjectile : MonoBehaviour
                     var playerController = col.GetComponent<PlayerController>();
                     if (playerController != null)
                     {
-                        GameplayManager.Instance.DecreasePlayerLives(playerController);
                         yield return playerController.ReceiveHit();
                     }
                 }
@@ -118,11 +124,13 @@ public class RocketProjectile : MonoBehaviour
         }
         else if (collideWithBoss)
         {
+            GameplayManager.Instance.PlaySfxAudio(_audioSource, GameplayManager.Instance.BossHitAudio);
             if (_throwingPlayerController != null)
             {
                 GameplayManager.Instance.IncreasePlayerScore(_throwingPlayerController.PlayerNumber, 1000);
             }
-            GameplayManager.Instance.DecreaseBossLives();
+
+            yield return GameplayManager.Instance.DecreaseBossLives();
         }
 
         Destroy(gameObject);
@@ -146,6 +154,8 @@ public class RocketProjectile : MonoBehaviour
         var endPoint = targetPosition;
 
         Vector3 direction = (endPoint - origin).normalized;
+
+        GameplayManager.Instance.PlaySfxAudio(_audioSource, GameplayManager.Instance.LaunchRocketAudio);
 
         GameObject rocket = Instantiate(GameplayManager.Instance.RocketPrefab, origin, Quaternion.LookRotation(direction, Vector3.up));
         rocket.layer = LayerMask.NameToLayer("PlayerRocket");

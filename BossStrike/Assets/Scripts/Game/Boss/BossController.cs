@@ -53,6 +53,17 @@ public class BossController : MonoBehaviour
 
     private LineRenderer _lineRenderer;
 
+    private AudioSource _audioSource;
+
+    private void Awake()
+    {
+        _audioSource = GetComponent<AudioSource>();
+        if (_audioSource == null)
+        {
+            Debug.LogError("AudioSource component not found on BossController.");
+        }
+    }
+
     private void Start()
     {
         _lineRenderer = GetComponent<LineRenderer>();
@@ -166,6 +177,8 @@ public class BossController : MonoBehaviour
     {
         yield return new WaitForSeconds(_beforeAttackDelay);
 
+        GameplayManager.Instance.PlaySfxAudio(_audioSource, GameplayManager.Instance.FlameAttackAudio);
+
         Vector3 origin = transform.position + Vector3.up * 1f;
         var endPoint = _targetPos + Vector3.up * 10f;
 
@@ -190,7 +203,6 @@ public class BossController : MonoBehaviour
                 var playerController = hit.collider.GetComponent<PlayerController>();
                 if (playerController != null)
                 {
-                    GameplayManager.Instance.DecreasePlayerLives(playerController);
                     yield return playerController.ReceiveHit();
                 }
             }
@@ -205,6 +217,8 @@ public class BossController : MonoBehaviour
         // 1. Get player position and spawn shadow
         Vector3 targetPos = _targetPlayer.transform.position;
         var shadowInstance = Instantiate(_shadowPrefab, new Vector3(targetPos.x, _shadowYPos, targetPos.z), Quaternion.identity);
+
+        GameplayManager.Instance.PlaySfxAudio(_audioSource, GameplayManager.Instance.EagleStrikeFlyAudio);
 
         // 2. Move boss high above target position
         Vector3 strikeStartPos = new Vector3(targetPos.x, targetPos.y + _strikeHeight, targetPos.z);
@@ -223,6 +237,8 @@ public class BossController : MonoBehaviour
 
         Destroy(shadowInstance); // Destroy shadow after strike
 
+        GameplayManager.Instance.PlaySfxAudio(_audioSource, GameplayManager.Instance.EagleStrikeSlamAudio);
+
         yield return null;
         // Reset Boss height
         transform.position = new Vector3(transform.position.x, _bossFlyHeight, transform.position.z);
@@ -238,7 +254,6 @@ public class BossController : MonoBehaviour
                 var playerController = col.GetComponent<PlayerController>();
                 if (playerController != null)
                 {
-                    GameplayManager.Instance.DecreasePlayerLives(playerController);
                     yield return playerController.ReceiveHit();
                 }
             }
@@ -250,6 +265,8 @@ public class BossController : MonoBehaviour
     private IEnumerator PerformRocketAttack(bool canExplode)
     {
         yield return new WaitForSeconds(_beforeAttackDelay);
+
+        GameplayManager.Instance.PlaySfxAudio(_audioSource, GameplayManager.Instance.LaunchRocketAudio);
 
         Vector3 origin = transform.position + Vector3.up * 30f;
         var endPoint = canExplode ? _targetPos : new Vector3(Random.Range(-80f, 80f), 0, Random.Range(-40f, 40f));
