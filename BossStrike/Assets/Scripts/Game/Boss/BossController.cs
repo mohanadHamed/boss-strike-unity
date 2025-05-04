@@ -151,6 +151,8 @@ public class BossController : MonoBehaviour
     {
         yield return PerformRocketAttack(true);
         yield return new WaitForSeconds(0.5f);
+        LockBeforeAttack();
+
         yield return PerformRocketAttack(true);
         yield return new WaitForSeconds(0.5f);
         yield return PerformRocketAttack(false);
@@ -250,7 +252,7 @@ public class BossController : MonoBehaviour
         yield return new WaitForSeconds(_beforeAttackDelay);
 
         Vector3 origin = transform.position + Vector3.up * 30f;
-        var endPoint = canExplode ? _targetPos : Vector3.zero;
+        var endPoint = canExplode ? _targetPos : new Vector3(Random.Range(-80f, 80f), 0, Random.Range(-40f, 40f));
 
         Vector3 direction = (endPoint - origin).normalized;
 

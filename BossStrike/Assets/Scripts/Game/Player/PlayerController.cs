@@ -115,6 +115,8 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
+        if (GameplayManager.Instance.IsGameOver) return;
+
         HandleInput();
 
         GameplayManager.Instance.IncreasePlayerScore(_playerNumber, _moveDirection != Vector3.zero ? 2 : 1);
