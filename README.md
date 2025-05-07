@@ -67,6 +67,11 @@ Assets/
 3. Open the scene `MainMenu`
 4. Hit Play!
 
+## Demo
+https://github.com/user-attachments/assets/e6cb252c-1a79-4e44-9fbf-80b40b4f37f0
+
+
+
 ## Screenshots
 ![image](https://github.com/user-attachments/assets/9de5ed63-cfcc-4fb1-941b-e18b1d44b4fe)
 ![image](https://github.com/user-attachments/assets/9541823a-f4ed-48cf-a4f5-f8911f0a71d5)
